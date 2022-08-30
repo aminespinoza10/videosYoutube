@@ -1,4 +1,4 @@
-﻿# DockerBot
+# DockerBot
 
 Bot Framework v4 echo bot sample.
 
