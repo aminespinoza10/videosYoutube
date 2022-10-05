@@ -57,9 +57,9 @@ resource "azurerm_subnet_network_security_group_association" "mynsgassociation" 
 }
 
 resource "random_string" "storageaccount-name" {
-  length = 16
+  length  = 16
   special = false
-  upper = false
+  upper   = false
 }
 
 resource "azurerm_storage_account" "mystorageaccount" {
@@ -95,7 +95,7 @@ resource "azurerm_network_interface" "myterraformnic" {
   ip_configuration {
     name                          = "myNicConfiguration"
     subnet_id                     = azurerm_subnet.myterraformsubnet.id
-    private_ip_address_allocation = "dynamic"
+    private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = element(azurerm_public_ip.myterraformpublicip.*.id, count.index)
   }
 
@@ -104,41 +104,26 @@ resource "azurerm_network_interface" "myterraformnic" {
   }
 }
 
-resource "azurerm_virtual_machine" "myterraformvm" {
+resource "azurerm_linux_virtual_machine" "myterraformvm" {
   count                 = var.vmcount
   name                  = "myVM-${count.index}"
-  location              = azurerm_resource_group.myterraformgroup.location
   resource_group_name   = azurerm_resource_group.myterraformgroup.name
+  location              = azurerm_resource_group.myterraformgroup.location
+  size                  = "Standard_F2"
+  admin_username        = var.admin_username
+  admin_password        = var.admin_password
   network_interface_ids = [element(azurerm_network_interface.myterraformnic.*.id, count.index)]
-  vm_size               = "Standard_DS1_v2"
 
-  storage_os_disk {
-    name              = "myOsDisk-${count.index}"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Premium_LRS"
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
   }
 
-  storage_image_reference {
+  source_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "16.04.0-LTS"
+    sku       = "16.04-LTS"
     version   = "latest"
-  }
-
-  os_profile {
-    computer_name  = "myvm${count.index}"
-    admin_username = var.admin_username
-    admin_password = var.admin_password
-  }
-
-  os_profile_linux_config {
-    disable_password_authentication = false
-  }
-
-  boot_diagnostics {
-    enabled     = "true"
-    storage_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint
   }
 
   tags = {
