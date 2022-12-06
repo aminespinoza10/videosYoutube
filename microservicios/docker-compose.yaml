@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+    mynetservice:
+        build:
+            context: ./net
+            dockerfile: Dockerfile
+        ports:
+            - "2000:80"
+    myjavaservice:
+        build:
+            context: ./java/amin
+            dockerfile: Dockerfile
+        ports:
+            - "3000:8080"
+    mypythonservice:
+        build:
+            context: ./python
+            dockerfile: Dockerfile
+        ports:
+            - "4000:5000"
+    mygoservice:
+        build:
+            context: ./go
+            dockerfile: Dockerfile
+        ports:
+            - "5000:8081"

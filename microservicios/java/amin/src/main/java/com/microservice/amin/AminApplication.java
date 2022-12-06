@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 public class AminApplication {
 
-	@GetMapping("/message")
+	@GetMapping("/WeatherForecast")
 	public String getMessage() {
-		return "Mi primer microservicio";
+		return "Today is a great sunny day for a Java service";
 	}
 
 	public static void main(String[] args) {

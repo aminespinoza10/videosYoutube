@@ -5,6 +5,6 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello, from Python!'
 
-@app.route('/getWeatherForecast')
+@app.route('/WeatherForecast')
 def getWeatherOnline():
-    return 'Today is gonna be a great sunny day for a Python service!'
+    return 'Today is gonna be a great snowy day for a Python service!'
